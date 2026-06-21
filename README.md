@@ -2,7 +2,7 @@
 
 A professional, out-of-the-box LaTeX template for typesetting academic essays, student papers, and journal manuscripts in strict compliance with the **APA 7th Edition** guidelines. 
 
-This template leverages the official `apa7` document class and is designed to build seamlessly on **macOS, Windows, and Linux** using **Tectonic** (a modern, self-contained TeX engine) and **BibLaTeX** (using a bundled, compatible Biber backend).
+This template leverages the official `apa7` document class and is designed to build seamlessly on **macOS, Windows, and Linux** using **Tectonic** (a modern, self-contained TeX engine) and **BibLaTeX** (using a dynamically downloaded, compatible Biber backend).
 
 ---
 
@@ -10,7 +10,8 @@ This template leverages the official `apa7` document class and is designed to bu
 
 - **APA 7 Compliance:** Native support for both student paper formats (`[stu]`) and professional manuscript formats (`[man]`).
 - **Zero-Configuration Build:** Compiles in a single command using Tectonic, automatically downloading required packages on the fly.
-- **Self-Contained Bibliography:** Resolves the notorious `biblatex`/`biber` version mismatch issue by bundling compatible local Biber binaries for both Windows and macOS.
+- **Self-Healing Versioning:** The build scripts automatically parse Tectonic's output to find the exact required Biber version and download/cache it locally, preventing version mismatch issues.
+- **Lightweight Repository:** No bulky Biber binaries are committed to Git. The `.bin/` cache folder is excluded via `.gitignore`.
 - **References Page Formatting:** Automatic page breaks and hanging indents formatted to APA standards.
 
 ---
@@ -19,16 +20,15 @@ This template leverages the official `apa7` document class and is designed to bu
 
 ```text
 apa7-latex-template/
-├── .gitignore          # Excludes compiled PDFs, system logs, and editor artifacts
+├── .gitignore          # Excludes compiled PDFs, cached binaries, and editor artifacts
 ├── README.md           # Documentation and usage guide
-├── biber               # Precompiled Biber 2.17 binary (Universal macOS binary)
-├── biber.exe           # Precompiled Biber 2.17 binary (Windows 64-bit binary)
 ├── compile.sh          # One-click compilation shell script (macOS/Linux)
 ├── compile.bat         # One-click compilation Batch script (Windows CMD)
 ├── compile.ps1         # One-click compilation PowerShell script (Windows PowerShell)
 ├── main.tex            # Main LaTeX document with metadata & placeholders
 └── references.bib      # BibLaTeX database containing sample entry citations
 ```
+*(On first execution, the scripts will create a `.bin/` folder to cache the downloaded Biber binary. This folder is ignored by Git.)*
 
 ---
 
@@ -75,8 +75,12 @@ Found biblatex control file version 3.8, expected version 3.11.
 This means that your biber (2.21) and biblatex (3.17) versions are incompatible.
 ```
 
-### The Solution
-This repository bundles the **Biber 2.17** binaries for both macOS (`biber`) and Windows (`biber.exe`). The provided compilation scripts automatically configure the command environment path to prioritize the local binary over the system-installed Biber, ensuring a successful build out-of-the-box.
+### The Solution (Automated Self-Healing Pipeline)
+To ensure the repository is maintainable long-term, Biber binaries are not committed to Git. Instead, the provided compilation scripts (`compile.sh` and `compile.ps1`) handle this dynamically:
+1. They search for a globally installed version of Biber and check if its version matches what the paper requires.
+2. If there is a version mismatch (or no global Biber is present), they parse the compiled `.bcf` (BibLaTeX Control File) to extract the required control file version.
+3. They map this control file version to the exact required Biber version, download it from SourceForge, extract it to a local `.bin/` directory, and prepend it to the compilation environment `$PATH`.
+4. If a Tectonic update changes the underlying package versions in the future, the compilation scripts automatically detect this on the next build, download the updated Biber version, and heal the build environment without requiring any user configuration.
 
 ---
 
@@ -100,6 +104,20 @@ Citations should be managed dynamically using standard `biblatex` macros:
 - **Year-Only Citation:** `\parencite*{citation_key}` renders as `(2026)`.
 
 Add or modify references inside `references.bib`.
+
+---
+
+## Running Unit Tests
+
+To verify version mapping, regex parsing, and script directory behaviors:
+- **macOS/Linux:** Run the test script in your terminal:
+  ```bash
+  ./tests/test_compile.sh
+  ```
+- **Windows (PowerShell):** Run:
+  ```powershell
+  .\tests\test_compile.ps1
+  ```
 
 ---
 

@@ -1,6 +1,9 @@
 # Ignore compiled output
 main.pdf
 
+# Ignore cached binaries downloaded at build time
+.bin/
+
 # Ignore macOS system files
 .DS_Store
 
