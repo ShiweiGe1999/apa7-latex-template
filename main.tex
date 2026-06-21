@@ -1,0 +1,77 @@
+% =========================================================================
+% APA 7th Edition LaTeX Template for Academic Essays and Papers
+% =========================================================================
+% Document class options:
+% - [stu]: Student paper format (default, no running head, includes course info)
+% - [man]: Manuscript format (standard for journal submissions, includes running head & abstract)
+% - [jou]: Journal format (two-column, compact layout)
+% =========================================================================
+\documentclass[stu, 12pt, american]{apa7}
+
+% --- Essential Packages ---
+\usepackage[utf8]{inputenc}
+\usepackage{babel}
+\usepackage{csquotes}
+
+% --- APA 7th Edition Citations (BibLaTeX + Biber) ---
+\usepackage[style=apa, backend=biber]{biblatex}
+\addbibresource{references.bib}
+
+% --- Document Metadata ---
+\title{Your Paper Title: Capitalize the Main Words of Your Subtitle}
+\shorttitle{APA 7 LaTeX Template} % Required if using [man] (manuscript) mode
+
+\author{Your Name}
+\affiliation{Department of Your Major, Your University Name}
+
+% The following fields are specific to student [stu] mode:
+\course{SUBJ 1234: Course Name}
+\professor{Instructor Name}
+\duedate{Month DD, YYYY}
+
+% --- Abstract (Required for [man] mode, ignored in [stu] mode) ---
+\abstract{
+  This is a sample abstract for the document. An abstract is a brief, comprehensive summary of the contents of the paper. It is typically required for professional manuscripts (using the \texttt{[man]} document class option) but is usually omitted for student papers (using the \texttt{[stu]} option) unless requested by the instructor. The abstract should be a single paragraph, double-spaced, and between 150 to 250 words.
+}
+
+% =========================================================================
+% Document Body
+% =========================================================================
+\begin{document}
+
+\maketitle % Generates the cover page automatically based on document class settings
+
+% -------------------------------------------------------------------------
+% Main Content Section
+% -------------------------------------------------------------------------
+\section{Introduction}
+Start writing the introduction of your essay here. The title of the paper is automatically centered and bolded at the top of the first page of text as a Level 1 heading, so you do not need to repeat it manually.
+
+In LaTeX, you can cite sources dynamically using the \texttt{biblatex} package. For instance, you can cite a source parenthetically \parencite{sample_article} or narratively as described by \textcite{sample_book}.
+
+APA style requires double-spacing, 1-inch margins, and page numbers in the top-right corner. The \texttt{apa7} class configures these margins and line spacing automatically.
+
+\section{First Major Topic}
+This is a Level 1 heading. Under APA 7 rules, headings are structured hierarchically:
+\begin{itemize}
+    \item \textbf{Level 1:} Centered, Bold, Title Case Heading.
+    \item \textbf{Level 2:} Flush Left, Bold, Title Case Heading.
+    \item \textbf{Level 3:} Flush Left, Bold Italic, Title Case Heading.
+\end{itemize}
+
+\subsection{Subtopic A}
+This is a Level 2 heading. It is formatted left-aligned, bold, and in title case.
+
+\subsubsection{Sub-subtopic 1}
+This is a Level 3 heading. It is formatted left-aligned, bold italic, and in title case.
+
+\section{Conclusion}
+To finish your document, write your concluding thoughts here. Make sure all citations correspond to entries in your bibliography file.
+
+% -------------------------------------------------------------------------
+% References Page
+% -------------------------------------------------------------------------
+\clearpage
+\printbibliography % Generates the "References" section automatically on a separate page
+
+\end{document}
